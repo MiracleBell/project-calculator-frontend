@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import Layout from "@root/components/Layout";
 
 import { logout } from "@root/store/auth";
 import projectsApi from "@root/store/projectApi";
-import { getProjects } from "@root/store/projectApi";
 
 import EditIcon from "@mui/icons-material/Edit";
 import {
@@ -20,13 +19,15 @@ import {
   IconButton,
   CircularProgress,
 } from "@mui/material";
+import SearchBar from "@root/components/SearchBar";
 
 export default function ProjectList() {
   const projects = projectsApi.endpoints.list.useQuery(
     JSON.parse(localStorage.getItem("user"))
   );
+  let filteredProjects = projects;
+
   const dispatch = useDispatch();
-  console.log(projects);
   function handleLogoutClick() {
     dispatch(logout());
   }
@@ -35,14 +36,30 @@ export default function ProjectList() {
     if (projects.error !== undefined) {
       handleLogoutClick();
     }
+    filteredProjects = projects;
     console.log(projects);
   }, [projects]);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    if (searchTerm === "") {
+      filteredProjects = projects;
+    } else {
+      filteredProjects = projects.data.filter((project) => {
+        return (
+          project.title.toLowerCase().includes(searchTerm.toLowerCase) ||
+          project.client.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      });
+    }
+    console.log(filteredProjects);
+  }, [searchTerm]);
 
   const comp = projects.isLoading ? (
     <CircularProgress />
   ) : (
     <TableBody>
-      {projects.data.map((project) => (
+      {filteredProjects.data.map((project) => (
         <TableRow key={project.id}>
           <TableCell>{project.title}</TableCell>
           <TableCell>{project.description}</TableCell>
@@ -62,7 +79,7 @@ export default function ProjectList() {
 
   return (
     <Layout>
-      <Button onClick={handleLogoutClick}>logout</Button>
+      <SearchBar value={searchTerm} onChange={setSearchTerm}></SearchBar>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
