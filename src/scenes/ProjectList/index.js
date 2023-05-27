@@ -18,8 +18,10 @@ import {
   Paper,
   IconButton,
   CircularProgress,
+  Box,
 } from "@mui/material";
 import SearchBar from "@root/components/SearchBar";
+import { useNavigate } from "react-router-dom";
 
 export default function ProjectList() {
   const projects = projectsApi.endpoints.list.useQuery(
@@ -30,6 +32,11 @@ export default function ProjectList() {
   const dispatch = useDispatch();
   function handleLogoutClick() {
     dispatch(logout());
+  }
+
+  const navigate = useNavigate();
+  function handleAddProjectClick() {
+    navigate("/projects-creation");
   }
 
   useEffect(() => {
@@ -79,7 +86,17 @@ export default function ProjectList() {
 
   return (
     <Layout>
-      <SearchBar value={searchTerm} onChange={setSearchTerm}></SearchBar>
+      <Box display={"flex"}>
+        <SearchBar value={searchTerm} onChange={setSearchTerm}></SearchBar>
+        <Button
+          variant="outlined"
+          size="small"
+          color="success"
+          onClick={handleAddProjectClick}
+        >
+          Add New Project
+        </Button>
+      </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

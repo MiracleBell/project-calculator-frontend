@@ -32,7 +32,7 @@ export const getProjects = async () => {
 
 const projectsApi = createApi({
   reducerPath: "projectsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/projects" }),
+  baseQuery: fetchBaseQuery({ baseUrl: PATH }),
   endpoints: (builder) => ({
     list: builder.query({
       query: (auth) => ({
@@ -58,15 +58,16 @@ const projectsApi = createApi({
       },
     }),
     create: builder.mutation({
-      query: ({ ...body }) => ({
+      query: (body) => ({
         url: "",
+        mode: "cors",
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": ORIGIN,
           Origin: ORIGIN,
-          Authorization: "Basic " + btoa("frog:qwertyu"),
+          Authorization: JSON.parse(localStorage.getItem("user")),
         },
         body,
       }),
@@ -81,6 +82,7 @@ const projectsApi = createApi({
     read: builder.query({
       query: (id) => ({
         url: `/${id}`,
+        mode: "cors",
         method: "GET",
       }),
       providesTags: (result) => {
@@ -95,13 +97,14 @@ const projectsApi = createApi({
     update: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/${id}`,
+        mode: "cors",
         method: "PUT",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": ORIGIN,
           Origin: ORIGIN,
-          Authorization: "Basic " + btoa("frog:qwertyu"),
+          Authorization: JSON.parse(localStorage.getItem("user")),
         },
         body: omit(["id", "created_at", "updated_at"], data),
       }),
@@ -118,13 +121,14 @@ const projectsApi = createApi({
     delete: builder.mutation({
       query: (id) => ({
         url: `/${id}`,
+        mode: "cors",
         method: "DELETE",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": ORIGIN,
           Origin: ORIGIN,
-          Authorization: "Basic " + btoa("frog:qwertyu"),
+          Authorization: JSON.parse(localStorage.getItem("user")),
         },
       }),
       invalidatesTags: (result, error, id) => [
