@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
 
 import Layout from "@root/components/Layout";
 
@@ -24,9 +25,10 @@ import SearchBar from "@root/components/SearchBar";
 import { useNavigate } from "react-router-dom";
 
 export default function ProjectList() {
-  const projects = projectsApi.endpoints.list.useQuery(
-    JSON.parse(localStorage.getItem("user"))
-  );
+  const projects = projectsApi.endpoints.list
+    .useQuery
+    // JSON.parse(localStorage.getItem("user"))
+    ();
   let filteredProjects = projects;
 
   const dispatch = useDispatch();
@@ -71,11 +73,11 @@ export default function ProjectList() {
           <TableCell>{project.title}</TableCell>
           <TableCell>{project.description}</TableCell>
           <TableCell>{project.client}</TableCell>
-          <TableCell>{project.deadline}</TableCell>
-          <TableCell>{project.time}</TableCell>
-          <TableCell>{project.lastDateUpdate}</TableCell>
+          <TableCell>{project.priceInRubles}</TableCell>
+          <TableCell>{project.estimateInDays / 5}</TableCell>
+          <TableCell>{project.lastUpdatedAt}</TableCell>
           <TableCell>
-            <IconButton>
+            <IconButton component={RouterLink} to={`/projects/${project.id}`}>
               <EditIcon />
             </IconButton>
           </TableCell>
