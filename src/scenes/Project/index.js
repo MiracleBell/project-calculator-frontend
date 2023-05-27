@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Typography } from "@mui/material";
 
 import HorizontalLine from "@root/components/HorizontalLine";
 import ProjectInfo from "@root/components/ProjectInfo";
@@ -17,15 +17,11 @@ function getId() {
 }
 
 const getProjectById = async (id) => {
-  const projects = await projectsApi.endpoints.list.useQuery(
-    JSON.parse(localStorage.getItem("user"))
-  );
+  const projects = await projectsApi.endpoints.list.useQuery();
   return projects.data.find((project) => project.id == id);
 };
 
 export default function Project() {
-  const project = getProjectById(getId());
-
   const [value, setValue] = useState("1");
   function handleTabChange(event, newValue) {
     setValue(newValue);
@@ -52,6 +48,7 @@ export default function Project() {
         </TabPanel>
         <TabPanel value="2">Item Two</TabPanel>
         <TabPanel value="3">Item Three</TabPanel>
+        <TabPanel value="4">Item Four</TabPanel>
       </TabContext>
     </>
   );

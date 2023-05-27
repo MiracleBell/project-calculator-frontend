@@ -25,15 +25,16 @@ import SearchBar from "@root/components/SearchBar";
 import { useNavigate } from "react-router-dom";
 
 export default function ProjectList() {
-  const projects = projectsApi.endpoints.list
-    .useQuery
-    // JSON.parse(localStorage.getItem("user"))
-    ();
+  const projects = projectsApi.endpoints.list.useQuery();
   let filteredProjects = projects;
 
   const dispatch = useDispatch();
   function handleLogoutClick() {
     dispatch(logout());
+  }
+
+  function handleEditClick(project) {
+    localStorage.setItem("currentProject", JSON.stringify(project));
   }
 
   const navigate = useNavigate();
@@ -75,7 +76,9 @@ export default function ProjectList() {
           <TableCell>{project.client}</TableCell>
           <TableCell>{project.priceInRubles}</TableCell>
           <TableCell>{project.estimateInDays / 5}</TableCell>
-          <TableCell>{project.lastUpdatedAt}</TableCell>
+          <TableCell>
+            {project.lastUpdatedAt.replace("T", " :: ").slice(0, -7)}
+          </TableCell>
           <TableCell>
             <IconButton component={RouterLink} to={`/projects/${project.id}`}>
               <EditIcon />
@@ -109,7 +112,7 @@ export default function ProjectList() {
               <TableCell>Weeks</TableCell>
               <TableCell>Budjet</TableCell>
               <TableCell>Last Date Update</TableCell>
-              <TableCell></TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           {comp}
