@@ -23,14 +23,6 @@ export default function ProjectCreation() {
 
   const handleSaveClick = async (data) => {
     console.log("save click");
-    let payload = {
-      title: data.title,
-      client: data.client,
-      description: data.description,
-      communicationCoefficient: data.communicationCoefficient,
-      riskCoefficient: data.riskCoefficient,
-    };
-
     let result = await createProject(data);
     if (result.errors == undefined) {
       navigate("/projects");

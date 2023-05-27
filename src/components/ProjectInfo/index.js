@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -8,7 +9,7 @@ import {
 } from "@mui/material";
 
 import projectsApi from "@root/store/projectApi";
-import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 function getId() {
   const currentURL = window.location.href;
@@ -29,13 +30,33 @@ const getProjectById = async (id) => {
 
 export default function ProjectInfo() {
   const navigate = useNavigate();
+  const [updateProject, { isLoading, isCreating }] =
+    projectsApi.endpoints.update.useMutation();
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const handleSaveClick = async (data) => {
+    console.log("update click");
+    let result = await updateProject(getId(), data);
+    if (result.errors == undefined) {
+      navigate("/projects");
+    }
+  };
+
   function handleDeclineClick() {
     navigate("/projects");
   }
 
   return (
     <>
-      <Box noValidate autoComplete="off">
+      <Box
+        component="form"
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit(handleSaveClick)}
+      >
         <Grid container spacing={2}>
           <Grid item xs={8}>
             <Typography>Project Name</Typography>
