@@ -4,6 +4,7 @@ import SignUp from "@root/scenes/SignUp";
 import ProjectList from "@root/scenes/ProjectList";
 import Home from "@root/scenes/Home";
 import ProjectCreation from "@root/scenes/ProjectCreation";
+import Project from "@root/scenes/Project";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/projects-creation",
     element: <ProjectCreation />,
+  },
+  {
+    path: "/projects/:projectId",
+    element: <Project />,
   },
 ]);
 

@@ -35,7 +35,7 @@ const projectsApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: PATH }),
   endpoints: (builder) => ({
     list: builder.query({
-      query: (auth) => ({
+      query: () => ({
         url: "",
         mode: "cors",
         method: "GET",
@@ -44,7 +44,7 @@ const projectsApi = createApi({
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": ORIGIN,
           Origin: ORIGIN,
-          Authorization: auth,
+          Authorization: JSON.parse(localStorage.getItem("user")),
         },
       }),
       providesTags: (result) => {
