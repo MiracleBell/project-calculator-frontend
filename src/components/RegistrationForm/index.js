@@ -33,8 +33,6 @@ export default function RegistrationForm() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("for submit activated");
-    console.log(data);
     let payload = {
       login: data.login,
       password: data.password,
