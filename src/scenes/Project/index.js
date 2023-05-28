@@ -6,6 +6,8 @@ import HorizontalLine from "@root/components/HorizontalLine";
 import ProjectInfo from "@root/components/ProjectInfo";
 
 import projectsApi from "@root/store/projectApi";
+import milestonesApi from "@root/store/milestoneApi";
+import MilestoneList from "@root/components/MilestoneList";
 
 function getId() {
   const currentURL = window.location.href;
@@ -26,7 +28,8 @@ export default function Project() {
   function handleTabChange(event, newValue) {
     setValue(newValue);
   }
-
+  const milestones = milestonesApi.endpoints.list.useQuery(getId());
+  console.log(milestones);
   return (
     <>
       <Typography variant="h2" sx={{ ml: 3 }}>
@@ -47,7 +50,9 @@ export default function Project() {
           <ProjectInfo />
         </TabPanel>
         <TabPanel value="2">Item Two</TabPanel>
-        <TabPanel value="3">Item Three</TabPanel>
+        <TabPanel value="3">
+          <MilestoneList milestones={milestones} />
+        </TabPanel>
         <TabPanel value="4">Item Four</TabPanel>
       </TabContext>
     </>
