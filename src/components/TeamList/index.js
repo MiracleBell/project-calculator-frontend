@@ -7,6 +7,7 @@ import teamsApi from "@root/store/teamApi";
 import useListTeamQuery from "@root/store/teamApi";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { LIST } from "@root/store/teamApi";
 
 import {
   Box,
@@ -44,22 +45,30 @@ export default function TeamList() {
     dispatch(logout());
   }
 
-  const comp = (
-    <TableBody>
-      <TableRow>
-        <TableCell>Senior developer</TableCell>
-        <TableCell>1</TableCell>
-        <TableCell>
-          <IconButton>
-            <EditIcon />
-          </IconButton>
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-    </TableBody>
-  );
+  const [team, setTeam] = useState(null);
+  LIST(getId()).then((result) => {
+    console.log(result);
+    setTeam(result);
+  });
+
+  const comp =
+    team == null ? (
+      <CircularProgress />
+    ) : (
+      <TableBody>
+        {team.map((project) => (
+          <TableRow key={project.id}>
+            <TableCell>{project.position}</TableCell>
+            <TableCell>{project.degreeOfInvolvement}</TableCell>
+            <TableCell>
+              <IconButton>
+                <EditIcon />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    );
 
   return (
     <>

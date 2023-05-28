@@ -5,20 +5,21 @@ import omit from "lodash/fp/omit";
 const PATH = apiUrl("projects");
 const ORIGIN = originUrl();
 
-export const LIST = async (projectId) => {
-  console.log("ENTER INTO TEAM API!!!!");
-  const res = await fetch(PATH, {
-    mode: "cors",
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": ORIGIN,
-      Origin: ORIGIN,
-      Authorization: JSON.parse(localStorage.getItem("user")),
-    },
-  });
-
+const LIST = async (projectId) => {
+  const res = await fetch(
+    `http://localhost:8080/projects/${projectId}/team-members`,
+    {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": ORIGIN,
+        Origin: ORIGIN,
+        Authorization: JSON.parse(localStorage.getItem("user")),
+      },
+    }
+  );
   let parse = await res.json();
   if (parse.errors !== undefined) {
     return await parse.errors;
@@ -58,7 +59,7 @@ const teamsApi = createApi({
         return [{ type: "teamMember", id: "list" }];
       },
     }),
-    create: builder.mutation({
+    createTeam: builder.mutation({
       query: (projectId, body) => ({
         url: `/${projectId}/team-members`,
         mode: "cors",
@@ -80,7 +81,7 @@ const teamsApi = createApi({
       },
       invalidatesTags: [{ type: "teamMember", id: "list" }],
     }),
-    update: builder.mutation({
+    updateTeam: builder.mutation({
       query: ({ projectId, memberId, ...data }) => ({
         url: `/${projectId}/team-members/${memberId}`,
         mode: "cors",
@@ -104,7 +105,7 @@ const teamsApi = createApi({
       invalidatesTags: (result, error, { id }) => [{ type: "teamMember", id }],
     }),
 
-    delete: builder.mutation({
+    deleteTeam: builder.mutation({
       query: (projectId, memberId) => ({
         url: `/${projectId}/team-members/${memberId}`,
         mode: "cors",
@@ -125,6 +126,7 @@ const teamsApi = createApi({
 });
 
 export default teamsApi;
+export { LIST };
 export const {
   useListTeamQuery,
   useCreateTeamMutation,
