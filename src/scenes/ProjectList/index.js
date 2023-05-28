@@ -6,6 +6,7 @@ import Layout from "@root/components/Layout";
 
 import { logout } from "@root/store/auth";
 import projectsApi from "@root/store/projectApi";
+import milestonesApi from "@root/store/milestoneApi";
 
 import EditIcon from "@mui/icons-material/Edit";
 import {
@@ -69,7 +70,7 @@ export default function ProjectList() {
     <CircularProgress />
   ) : (
     <TableBody>
-      {filteredProjects.data.map((project) => (
+      {projects.data.map((project) => (
         <TableRow key={project.id}>
           <TableCell>{project.title}</TableCell>
           <TableCell>{project.description}</TableCell>

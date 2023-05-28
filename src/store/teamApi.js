@@ -5,7 +5,8 @@ import omit from "lodash/fp/omit";
 const PATH = apiUrl("projects");
 const ORIGIN = originUrl();
 
-export const getProjects = async () => {
+export const LIST = async (projectId) => {
+  console.log("ENTER INTO TEAM API!!!!");
   const res = await fetch(PATH, {
     mode: "cors",
     method: "GET",
@@ -30,13 +31,13 @@ export const getProjects = async () => {
   return arr;
 };
 
-const projectsApi = createApi({
-  reducerPath: "projectsApi",
+const teamsApi = createApi({
+  reducerPath: "teamsApi",
   baseQuery: fetchBaseQuery({ baseUrl: PATH }),
   endpoints: (builder) => ({
-    list: builder.query({
-      query: () => ({
-        url: "",
+    teamList: builder.query({
+      query: (projectId) => ({
+        url: `/${projectId}/team-members`,
         mode: "cors",
         method: "GET",
         headers: {
@@ -50,16 +51,16 @@ const projectsApi = createApi({
       providesTags: (result) => {
         if (result) {
           return [
-            ...result.map(({ id }) => ({ type: "projects", id })),
-            { type: "projects", id: "list" },
+            ...result.map(({ id }) => ({ type: "teamMember", id })),
+            { type: "team", id: "list" },
           ];
         }
-        return [{ type: "projects", id: "list" }];
+        return [{ type: "teamMember", id: "list" }];
       },
     }),
     create: builder.mutation({
-      query: (body) => ({
-        url: "",
+      query: (projectId, body) => ({
+        url: `/${projectId}/team-members`,
         mode: "cors",
         method: "POST",
         headers: {
@@ -74,29 +75,14 @@ const projectsApi = createApi({
       providesTags: (result) => {
         if (result) {
           const { id } = result;
-          return [{ type: "projects", id }];
+          return [{ type: "teamMember", id }];
         }
       },
-      invalidatesTags: [{ type: "projects", id: "list" }],
-    }),
-    read: builder.query({
-      query: (id) => ({
-        url: `/${id}`,
-        mode: "cors",
-        method: "GET",
-      }),
-      providesTags: (result) => {
-        if (result) {
-          const { id } = result;
-          return [{ type: "projects", id }];
-        }
-        return [];
-      },
-      invalidatesTags: (result, error, { id }) => [{ type: "projects", id }],
+      invalidatesTags: [{ type: "teamMember", id: "list" }],
     }),
     update: builder.mutation({
-      query: ({ id, ...data }) => ({
-        url: `/${id}`,
+      query: ({ projectId, memberId, ...data }) => ({
+        url: `/${projectId}/team-members/${memberId}`,
         mode: "cors",
         method: "PUT",
         headers: {
@@ -111,16 +97,16 @@ const projectsApi = createApi({
       providesTags: (result) => {
         if (result) {
           const { id } = result;
-          return [{ type: "projects", id }];
+          return [{ type: "teamMember", id }];
         }
         return [];
       },
-      invalidatesTags: (result, error, { id }) => [{ type: "projects", id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "teamMember", id }],
     }),
 
     delete: builder.mutation({
-      query: (id) => ({
-        url: `/${id}`,
+      query: (projectId, memberId) => ({
+        url: `/${projectId}/team-members/${memberId}`,
         mode: "cors",
         method: "DELETE",
         headers: {
@@ -132,10 +118,16 @@ const projectsApi = createApi({
         },
       }),
       invalidatesTags: (result, error, id) => [
-        { type: "projects", id: "list" },
+        { type: "teamMember", id: "list" },
       ],
     }),
   }),
 });
 
-export default projectsApi;
+export default teamsApi;
+export const {
+  useListTeamQuery,
+  useCreateTeamMutation,
+  useUpdateTeamMutation,
+  useDeleteTeamMutation,
+} = teamsApi;
