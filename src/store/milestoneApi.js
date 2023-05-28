@@ -9,7 +9,7 @@ const milestonesApi = createApi({
   reducerPath: "milestonesApi",
   baseQuery: fetchBaseQuery({ baseUrl: PATH }),
   endpoints: (builder) => ({
-    list: builder.query({
+    milestoneList: builder.query({
       query: (projectId) => ({
         url: `/${projectId}/milestones`,
         mode: "cors",
@@ -22,17 +22,17 @@ const milestonesApi = createApi({
           Authorization: JSON.parse(localStorage.getItem("user")),
         },
       }),
-      providesTags: (result) => {
-        if (result) {
-          return [
-            ...result.map(({ id }) => ({ type: "milestones", id })),
-            { type: "milestones", id: "list" },
-          ];
-        }
-        return [{ type: "milestones", id: "list" }];
-      },
+      // providesTags: (result) => {
+      //   if (result) {
+      //     return [
+      //       ...result.map(({ id }) => ({ type: "milestones", id })),
+      //       { type: "milestones", id: "list" },
+      //     ];
+      //   }
+      //   return [{ type: "milestones", id: "list" }];
+      // },
     }),
-    create: builder.mutation({
+    createMilestone: builder.mutation({
       query: (body) => ({
         url: `/${localStorage.getItem("id")}/milestones`,
         mode: "cors",
@@ -54,7 +54,7 @@ const milestonesApi = createApi({
       },
       invalidatesTags: [{ type: "milestones", id: "list" }],
     }),
-    read: builder.query({
+    readMilestone: builder.query({
       query: (id) => ({
         url: `/${id}`,
         mode: "cors",
@@ -69,7 +69,7 @@ const milestonesApi = createApi({
       },
       invalidatesTags: (result, error, { id }) => [{ type: "projects", id }],
     }),
-    update: builder.mutation({
+    updateMilestone: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/${id}`,
         mode: "cors",
@@ -93,7 +93,7 @@ const milestonesApi = createApi({
       invalidatesTags: (result, error, { id }) => [{ type: "projects", id }],
     }),
 
-    delete: builder.mutation({
+    deleteMilestone: builder.mutation({
       query: (id) => ({
         url: `/${id}`,
         mode: "cors",

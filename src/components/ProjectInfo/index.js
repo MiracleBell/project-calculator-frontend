@@ -10,6 +10,7 @@ import {
 
 import projectsApi from "@root/store/projectApi";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 
 function getId() {
   const currentURL = window.location.href;
@@ -30,6 +31,11 @@ const getProjectById = async (id) => {
 
 export default function ProjectInfo() {
   const navigate = useNavigate();
+  const [project, setProject] = useState(null);
+  getProjectById(getId()).then((result) => {
+    setProject(result);
+  });
+
   const [updateProject, { isLoading, isCreating }] =
     projectsApi.endpoints.update.useMutation();
   const {
@@ -49,6 +55,88 @@ export default function ProjectInfo() {
     navigate("/projects");
   }
 
+  const comp =
+    project == null ? (
+      <CircularProgress />
+    ) : (
+      <>
+        <TextField
+          margin="normal"
+          size="small"
+          id="title"
+          name="title"
+          label="Project name"
+          value={project.title}
+          sx={{ width: 500 }}
+        ></TextField>
+
+        <TextField
+          margin="normal"
+          size="small"
+          id="client"
+          name="client"
+          label="Client"
+          value={project.client}
+          sx={{ width: 500 }}
+        ></TextField>
+
+        <TextField
+          multiline
+          margin="normal"
+          size="small"
+          id="description"
+          name="description"
+          label="Description"
+          value={project.description}
+          sx={{ width: 500 }}
+        ></TextField>
+
+        <TextField
+          margin="normal"
+          size="small"
+          id="communicationCoefficient"
+          name="communicationCoefficient"
+          label="Communication coefficient"
+          value={project.communicationCoefficient}
+          sx={{ width: 500 }}
+        ></TextField>
+
+        <TextField
+          margin="normal"
+          size="small"
+          id="riskCoefficient"
+          name="riskCoefficient"
+          label="Risk coefficient"
+          value={project.riskCoefficient}
+          sx={{ width: 500 }}
+        ></TextField>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Button
+            type="submit"
+            variant="contained"
+            color="success"
+            sx={{ margin: 2 }}
+          >
+            Save
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            sx={{ margin: 2 }}
+            onClick={handleDeclineClick}
+          >
+            Decline
+          </Button>
+        </Box>
+      </>
+    );
+
   return (
     <>
       <Box
@@ -59,71 +147,7 @@ export default function ProjectInfo() {
       >
         <Grid container spacing={2}>
           <Grid item xs={8}>
-            <Typography>Project Name</Typography>
-            <TextField
-              margin="normal"
-              size="small"
-              id="title"
-              name="title"
-              sx={{ width: 500 }}
-            ></TextField>
-            <Typography>Client</Typography>
-            <TextField
-              margin="normal"
-              size="small"
-              id="client"
-              name="client"
-              sx={{ width: 500 }}
-            ></TextField>
-            <Typography>Description</Typography>
-            <TextField
-              multiline
-              margin="normal"
-              size="small"
-              id="description"
-              name="description"
-              sx={{ width: 500 }}
-            ></TextField>
-            <Typography>Communication coefficient</Typography>
-            <TextField
-              margin="normal"
-              size="small"
-              id="commu"
-              name="description"
-              sx={{ width: 500 }}
-            ></TextField>
-            <Typography>Risk coefficient</Typography>
-            <TextField
-              margin="normal"
-              size="small"
-              id="description"
-              name="description"
-              sx={{ width: 500 }}
-            ></TextField>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Button
-                type="submit"
-                variant="contained"
-                color="success"
-                sx={{ margin: 2 }}
-              >
-                Save
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                sx={{ margin: 2 }}
-                onClick={handleDeclineClick}
-              >
-                Decline
-              </Button>
-            </Box>
+            {comp}
           </Grid>
           <Grid>
             <Box
