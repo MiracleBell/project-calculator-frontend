@@ -34,6 +34,7 @@ export default function ProjectInfo() {
   const [project, setProject] = useState(null);
   getProjectById(getId()).then((result) => {
     setProject(result);
+    console.log(result);
   });
 
   const [updateProject, { isLoading, isCreating }] =
@@ -60,94 +61,82 @@ export default function ProjectInfo() {
       <CircularProgress />
     ) : (
       <>
-        <TextField
-          margin="normal"
-          size="small"
-          id="title"
-          name="title"
-          label="Project name"
-          value={project.title}
-          sx={{ width: 500 }}
-        ></TextField>
-
-        <TextField
-          margin="normal"
-          size="small"
-          id="client"
-          name="client"
-          label="Client"
-          value={project.client}
-          sx={{ width: 500 }}
-        ></TextField>
-
-        <TextField
-          multiline
-          margin="normal"
-          size="small"
-          id="description"
-          name="description"
-          label="Description"
-          value={project.description}
-          sx={{ width: 500 }}
-        ></TextField>
-
-        <TextField
-          margin="normal"
-          size="small"
-          id="communicationCoefficient"
-          name="communicationCoefficient"
-          label="Communication coefficient"
-          value={project.communicationCoefficient}
-          sx={{ width: 500 }}
-        ></TextField>
-
-        <TextField
-          margin="normal"
-          size="small"
-          id="riskCoefficient"
-          name="riskCoefficient"
-          label="Risk coefficient"
-          value={project.riskCoefficient}
-          sx={{ width: 500 }}
-        ></TextField>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Button
-            type="submit"
-            variant="contained"
-            color="success"
-            sx={{ margin: 2 }}
-          >
-            Save
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            sx={{ margin: 2 }}
-            onClick={handleDeclineClick}
-          >
-            Decline
-          </Button>
-        </Box>
-      </>
-    );
-
-  return (
-    <>
-      <Box
-        component="form"
-        noValidate
-        autoComplete="off"
-        onSubmit={handleSubmit(handleSaveClick)}
-      >
         <Grid container spacing={2}>
           <Grid item xs={8}>
-            {comp}
+            <TextField
+              margin="normal"
+              size="small"
+              id="title"
+              name="title"
+              label="Project name"
+              value={project.title}
+              sx={{ width: 500 }}
+            ></TextField>
+
+            <TextField
+              margin="normal"
+              size="small"
+              id="client"
+              name="client"
+              label="Client"
+              value={project.client}
+              sx={{ width: 500 }}
+            ></TextField>
+
+            <TextField
+              multiline
+              margin="normal"
+              size="small"
+              id="description"
+              name="description"
+              label="Description"
+              value={project.description}
+              sx={{ width: 500 }}
+            ></TextField>
+
+            <TextField
+              margin="normal"
+              size="small"
+              id="communicationCoefficient"
+              name="communicationCoefficient"
+              label="Communication coefficient"
+              value={project.communicationCoefficient}
+              sx={{ width: 500 }}
+            ></TextField>
+
+            <TextField
+              margin="normal"
+              size="small"
+              id="riskCoefficient"
+              name="riskCoefficient"
+              label="Risk coefficient"
+              value={project.riskCoefficient}
+              sx={{ width: 500 }}
+            ></TextField>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                type="submit"
+                variant="contained"
+                color="success"
+                sx={{ margin: 2 }}
+              >
+                Save
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ margin: 2 }}
+                onClick={handleDeclineClick}
+              >
+                Decline
+              </Button>
+            </Box>
           </Grid>
           <Grid>
             <Box
@@ -165,15 +154,26 @@ export default function ProjectInfo() {
                 Estimation
               </Typography>
               <Typography variant="h6" textAlign={"left"} sx={{ margin: 2 }}>
-                Time:
+                Time: {project.estimateInDays / 5} weeks
               </Typography>
               <Typography variant="h6" textAlign={"left"} sx={{ margin: 2 }}>
-                Budjet:
+                Budjet: {project.priceInRubles / 5} rubles
               </Typography>
             </Box>
           </Grid>
         </Grid>
-      </Box>
+      </>
+    );
+
+  return (
+    <>
+      <Box
+        component="form"
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit(handleSaveClick)}
+      ></Box>
+      {comp}
     </>
   );
 }

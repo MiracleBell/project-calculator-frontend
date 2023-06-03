@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { logout } from "@root/store/auth";
 import MilestoneCreation from "@root/components/MilestoneCreation";
-import milestonesApi from "@root/store/projectApi";
+import milestonesApi from "@root/store/milestoneApi";
 
 import {
   Box,
@@ -40,8 +40,10 @@ export default function MilestoneList() {
   function handleLogoutClick() {
     dispatch(logout());
   }
-  const milestones = milestonesApi.endpoints.list.useQuery(getId());
+  const milestones = milestonesApi.endpoints.milestoneList.useQuery(getId());
+  console.log("!!!!!!!!!!!!!!!!!");
   console.log(milestones);
+  console.log("!!!!!!!!!!!!!!!!!");
   return (
     <>
       <MilestoneCreation open={open} setOpen={setOpen} projectId={getId()} />

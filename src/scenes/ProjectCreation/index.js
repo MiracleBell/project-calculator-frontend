@@ -91,44 +91,6 @@ export default function ProjectCreation() {
           helperText={errors.description ? "Обязательное поле" : ""}
           sx={{ width: 600 }}
         />
-        <TextField
-          margin="normal"
-          size="small"
-          id="communicationCoefficient"
-          name="communicationCoefficient"
-          placeholder="Communication coefficient"
-          autoComplete="communicationCoefficient"
-          {...register("communicationCoefficient", {
-            required: true,
-            pattern: /^[0-9]+(\.[0-9]{1,2})?$/,
-          })}
-          error={!!errors.communicationCoefficient}
-          helperText={
-            errors.communicationCoefficient
-              ? "Обязательное поле, допустимо две цифры после запятой"
-              : ""
-          }
-          sx={{ width: 600 }}
-        />
-        <TextField
-          margin="normal"
-          size="small"
-          id="riskCoefficient"
-          name="riskCoefficient"
-          placeholder="Risk coefficient"
-          autoComplete="riskCoefficient"
-          {...register("riskCoefficient", {
-            required: true,
-            pattern: /^[0-9]+(\.[0-9]{1,2})?$/,
-          })}
-          error={!!errors.riskCoefficient}
-          helperText={
-            errors.riskCoefficient
-              ? "Обязательное поле, допустимо две цифры после запятой"
-              : ""
-          }
-          sx={{ width: 600 }}
-        />
         <Box
           sx={{
             display: "flex",

@@ -9,6 +9,7 @@ import projectsApi from "@root/store/projectApi";
 import milestonesApi from "@root/store/milestoneApi";
 
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button,
   Table,
@@ -36,6 +37,10 @@ export default function ProjectList() {
 
   function handleEditClick(project) {
     localStorage.setItem("currentProject", JSON.stringify(project));
+  }
+
+  function handleDeleteClick(projectId) {
+    // projectsApi.endpointe.delete.useMutation(projectId);
   }
 
   const navigate = useNavigate();
@@ -83,6 +88,9 @@ export default function ProjectList() {
           <TableCell>
             <IconButton component={RouterLink} to={`/projects/${project.id}`}>
               <EditIcon />
+            </IconButton>
+            <IconButton onClick={handleDeleteClick(project.id)}>
+              <DeleteIcon />
             </IconButton>
           </TableCell>
         </TableRow>

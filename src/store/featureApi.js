@@ -2,41 +2,16 @@ import { apiUrl, originUrl } from "@root/utils/fetch";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import omit from "lodash/fp/omit";
 
-const PATH = apiUrl("/projects");
+const PATH = apiUrl("projects");
 const ORIGIN = originUrl();
 
-export const getMilestones = async (projectId) => {
-  const res = await fetch(PATH + `/${projectId}/milestones`, {
-    mode: "cors",
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": ORIGIN,
-      Origin: ORIGIN,
-      Authorization: JSON.parse(localStorage.getItem("user")),
-    },
-  });
-
-  let parse = await res.json();
-  if (parse.errors !== undefined) {
-    return await parse.errors;
-  }
-  const arr = [];
-  parse.map((elem) => {
-    arr.push(elem);
-  });
-
-  return arr;
-};
-
-const milestonesApi = createApi({
-  reducerPath: "milestonesApi",
+const featuresApi = createApi({
+  reducerPath: "featureApi",
   baseQuery: fetchBaseQuery({ baseUrl: PATH }),
   endpoints: (builder) => ({
-    milestoneList: builder.query({
-      query: (projectId) => ({
-        url: `/${projectId}/milestones`,
+    list: builder.query({
+      query: () => ({
+        url: "",
         mode: "cors",
         method: "GET",
         headers: {
@@ -47,19 +22,19 @@ const milestonesApi = createApi({
           Authorization: JSON.parse(localStorage.getItem("user")),
         },
       }),
-      // providesTags: (result) => {
-      //   if (result) {
-      //     return [
-      //       ...result.map(({ id }) => ({ type: "milestones", id })),
-      //       { type: "milestones", id: "list" },
-      //     ];
-      //   }
-      //   return [{ type: "milestones", id: "list" }];
-      // },
+      providesTags: (result) => {
+        if (result) {
+          return [
+            ...result.map(({ id }) => ({ type: "features", id })),
+            { type: "features", id: "list" },
+          ];
+        }
+        return [{ type: "features", id: "list" }];
+      },
     }),
-    createMilestone: builder.mutation({
+    create: builder.mutation({
       query: (body) => ({
-        url: `/${localStorage.getItem("id")}/milestones`,
+        url: "",
         mode: "cors",
         method: "POST",
         headers: {
@@ -74,12 +49,12 @@ const milestonesApi = createApi({
       providesTags: (result) => {
         if (result) {
           const { id } = result;
-          return [{ type: "milestones", id }];
+          return [{ type: "features", id }];
         }
       },
-      invalidatesTags: [{ type: "milestones", id: "list" }],
+      invalidatesTags: [{ type: "features", id: "list" }],
     }),
-    readMilestone: builder.query({
+    read: builder.query({
       query: (id) => ({
         url: `/${id}`,
         mode: "cors",
@@ -88,13 +63,13 @@ const milestonesApi = createApi({
       providesTags: (result) => {
         if (result) {
           const { id } = result;
-          return [{ type: "projects", id }];
+          return [{ type: "features", id }];
         }
         return [];
       },
-      invalidatesTags: (result, error, { id }) => [{ type: "projects", id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "features", id }],
     }),
-    updateMilestone: builder.mutation({
+    update: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/${id}`,
         mode: "cors",
@@ -111,14 +86,14 @@ const milestonesApi = createApi({
       providesTags: (result) => {
         if (result) {
           const { id } = result;
-          return [{ type: "projects", id }];
+          return [{ type: "features", id }];
         }
         return [];
       },
-      invalidatesTags: (result, error, { id }) => [{ type: "projects", id }],
+      invalidatesTags: (result, error, { id }) => [{ type: "features", id }],
     }),
 
-    deleteMilestone: builder.mutation({
+    delete: builder.mutation({
       query: (id) => ({
         url: `/${id}`,
         mode: "cors",
@@ -132,10 +107,10 @@ const milestonesApi = createApi({
         },
       }),
       invalidatesTags: (result, error, id) => [
-        { type: "projects", id: "list" },
+        { type: "features", id: "list" },
       ],
     }),
   }),
 });
 
-export default milestonesApi;
+export default featuresApi;

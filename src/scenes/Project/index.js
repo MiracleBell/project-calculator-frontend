@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Box, CircularProgress, Tab, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Tab, Typography } from "@mui/material";
 
 import HorizontalLine from "@root/components/HorizontalLine";
 import ProjectInfo from "@root/components/ProjectInfo";
@@ -9,6 +9,7 @@ import projectsApi from "@root/store/projectApi";
 import milestonesApi from "@root/store/milestoneApi";
 import MilestoneList from "@root/components/MilestoneList";
 import TeamList from "@root/components/TeamList";
+import FeatureList from "../../components/FeatureList";
 
 function getId() {
   const currentURL = window.location.href;
@@ -59,7 +60,9 @@ export default function Project() {
           <MilestoneList />
         </TabPanel>
 
-        <TabPanel value="4">Item Four</TabPanel>
+        <TabPanel value="4">
+          <FeatureList />
+        </TabPanel>
       </TabContext>
     </>
   );
