@@ -84,6 +84,13 @@ const projectsApi = createApi({
         url: `/${id}`,
         mode: "cors",
         method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": ORIGIN,
+          Origin: ORIGIN,
+          Authorization: JSON.parse(localStorage.getItem("user")),
+        },
       }),
       providesTags: (result) => {
         if (result) {

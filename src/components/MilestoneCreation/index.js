@@ -10,6 +10,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
+const formatDate = (date) => {};
+
 export default function MilestoneCreation({ open, setOpen, projectId }) {
   const handleClose = () => setOpen(false);
 
@@ -28,9 +30,9 @@ export default function MilestoneCreation({ open, setOpen, projectId }) {
     milestonesApi.endpoints.create.useMutation();
 
   const handleSave = async (data) => {
-    localStorage.setItem("id", projectId);
     console.log("save click");
     console.log(startDate);
+    console.log(formatDate(startDate));
     let request = {
       title: data.title,
       description: data.description,

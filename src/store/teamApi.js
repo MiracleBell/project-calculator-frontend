@@ -5,21 +5,18 @@ import omit from "lodash/fp/omit";
 const PATH = apiUrl("projects");
 const ORIGIN = originUrl();
 
-const LIST = async (projectId) => {
-  const res = await fetch(
-    `http://localhost:8080/projects/${projectId}/team-members`,
-    {
-      mode: "cors",
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": ORIGIN,
-        Origin: ORIGIN,
-        Authorization: JSON.parse(localStorage.getItem("user")),
-      },
-    }
-  );
+const getTeam = async (projectId) => {
+  const res = await fetch(PATH + `/${projectId}/team-members`, {
+    mode: "cors",
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": ORIGIN,
+      Origin: ORIGIN,
+      Authorization: JSON.parse(localStorage.getItem("user")),
+    },
+  });
   let parse = await res.json();
   if (parse.errors !== undefined) {
     return await parse.errors;
@@ -126,7 +123,7 @@ const teamsApi = createApi({
 });
 
 export default teamsApi;
-export { LIST };
+export { getTeam };
 export const {
   useListTeamQuery,
   useCreateTeamMutation,

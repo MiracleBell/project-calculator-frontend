@@ -6,17 +6,49 @@ const PATH = apiUrl("/projects");
 const ORIGIN = originUrl();
 
 export const getMilestones = async (projectId) => {
-  const res = await fetch(PATH + `/${projectId}/milestones`, {
-    mode: "cors",
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": ORIGIN,
-      Origin: ORIGIN,
-      Authorization: JSON.parse(localStorage.getItem("user")),
-    },
+  const res = await fetch(
+    `http://localhost:8080/projects/${projectId}/milestones`,
+    {
+      mode: "cors",
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": ORIGIN,
+        Origin: ORIGIN,
+        Authorization: JSON.parse(localStorage.getItem("user")),
+      },
+    }
+  );
+
+  let parse = await res.json();
+  if (parse.errors !== undefined) {
+    return await parse.errors;
+  }
+  const arr = [];
+  parse.map((elem) => {
+    arr.push(elem);
   });
+
+  return arr;
+};
+
+export const createMilestone = async (projectId, body) => {
+  const res = await fetch(
+    `http://localhost:8080/projects/${projectId}/milestones`,
+    {
+      mode: "cors",
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": ORIGIN,
+        Origin: ORIGIN,
+        Authorization: JSON.parse(localStorage.getItem("user")),
+      },
+      body,
+    }
+  );
 
   let parse = await res.json();
   if (parse.errors !== undefined) {

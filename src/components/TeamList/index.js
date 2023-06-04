@@ -7,7 +7,7 @@ import teamsApi from "@root/store/teamApi";
 import useListTeamQuery from "@root/store/teamApi";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { LIST } from "@root/store/teamApi";
+import { getTeam } from "@root/store/teamApi";
 
 import {
   Box,
@@ -46,10 +46,14 @@ export default function TeamList() {
   }
 
   const [team, setTeam] = useState(null);
-  LIST(getId()).then((result) => {
-    console.log(result);
-    setTeam(result);
-  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getTeam(getId());
+      setTeam(result);
+    };
+    fetchData();
+  }, []);
 
   const comp =
     team == null ? (
@@ -63,6 +67,9 @@ export default function TeamList() {
             <TableCell>
               <IconButton>
                 <EditIcon />
+              </IconButton>
+              <IconButton>
+                <DeleteIcon />
               </IconButton>
             </TableCell>
           </TableRow>

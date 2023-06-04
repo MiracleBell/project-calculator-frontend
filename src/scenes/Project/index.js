@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, CircularProgress, Grid, Tab, Typography } from "@mui/material";
 
@@ -6,7 +6,6 @@ import HorizontalLine from "@root/components/HorizontalLine";
 import ProjectInfo from "@root/components/ProjectInfo";
 
 import projectsApi from "@root/store/projectApi";
-import milestonesApi from "@root/store/milestoneApi";
 import MilestoneList from "@root/components/MilestoneList";
 import TeamList from "@root/components/TeamList";
 import FeatureList from "../../components/FeatureList";
@@ -17,12 +16,14 @@ function getId() {
     currentURL.lastIndexOf("/projects") + 10,
     currentURL.length
   );
+  localStorage.setItem("proejctId", id);
   return id;
 }
 
 const getProjectById = async (id) => {
-  let projects = await projectsApi.endpoints.list.useQuery();
-  return projects.data.find((project) => project.id == id);
+  let projects = await projectsApi.endpoints.list.useQuery(getId());
+  const result = await projects.data.find((project) => project.id == id);
+  return result;
 };
 
 export default function Project() {
@@ -31,6 +32,16 @@ export default function Project() {
   function handleTabChange(event, newValue) {
     setValue(newValue);
   }
+
+  const [project, setProject] = useState(null);
+  useEffect(() => {
+    const fetchData = () => {
+      const res = getProjectById(getId());
+      setProject(res);
+      console.log(project);
+    };
+    fetchData();
+  }, []);
 
   return (
     <>

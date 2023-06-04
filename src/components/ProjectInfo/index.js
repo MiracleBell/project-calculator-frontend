@@ -1,4 +1,10 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { useForm } from "react-hook-form";
+
+import projectsApi from "@root/store/projectApi";
+
 import {
   Box,
   Button,
@@ -8,16 +14,13 @@ import {
   Typography,
 } from "@mui/material";
 
-import projectsApi from "@root/store/projectApi";
-import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-
 function getId() {
   const currentURL = window.location.href;
   let id = currentURL.substring(
     currentURL.lastIndexOf("/projects") + 10,
     currentURL.length
   );
+  localStorage.setItem("projectId", id);
   return id;
 }
 
@@ -69,7 +72,7 @@ export default function ProjectInfo() {
               id="title"
               name="title"
               label="Project name"
-              value={project.title}
+              defaultValue={project.title}
               sx={{ width: 500 }}
             ></TextField>
 
@@ -79,7 +82,7 @@ export default function ProjectInfo() {
               id="client"
               name="client"
               label="Client"
-              value={project.client}
+              defaultValue={project.client}
               sx={{ width: 500 }}
             ></TextField>
 
@@ -90,29 +93,10 @@ export default function ProjectInfo() {
               id="description"
               name="description"
               label="Description"
-              value={project.description}
+              defaultValue={project.description}
               sx={{ width: 500 }}
             ></TextField>
 
-            <TextField
-              margin="normal"
-              size="small"
-              id="communicationCoefficient"
-              name="communicationCoefficient"
-              label="Communication coefficient"
-              value={project.communicationCoefficient}
-              sx={{ width: 500 }}
-            ></TextField>
-
-            <TextField
-              margin="normal"
-              size="small"
-              id="riskCoefficient"
-              name="riskCoefficient"
-              label="Risk coefficient"
-              value={project.riskCoefficient}
-              sx={{ width: 500 }}
-            ></TextField>
             <Box
               sx={{
                 display: "flex",
@@ -154,7 +138,7 @@ export default function ProjectInfo() {
                 Estimation
               </Typography>
               <Typography variant="h6" textAlign={"left"} sx={{ margin: 2 }}>
-                Time: {project.estimateInDays / 5} weeks
+                Time: {Math.ceil(project.estimateInDays / 5)} weeks
               </Typography>
               <Typography variant="h6" textAlign={"left"} sx={{ margin: 2 }}>
                 Budjet: {project.priceInRubles / 5} rubles

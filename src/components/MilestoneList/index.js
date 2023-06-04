@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { logout } from "@root/store/auth";
 import MilestoneCreation from "@root/components/MilestoneCreation";
 import milestonesApi from "@root/store/milestoneApi";
+import EditIcon from "@mui/icons-material/Edit";
+import { getMilestones } from "@root/store/milestoneApi";
 
 import {
   Box,
@@ -40,10 +42,40 @@ export default function MilestoneList() {
   function handleLogoutClick() {
     dispatch(logout());
   }
-  const milestones = milestonesApi.endpoints.milestoneList.useQuery(getId());
-  console.log("!!!!!!!!!!!!!!!!!");
-  console.log(milestones);
-  console.log("!!!!!!!!!!!!!!!!!");
+  const [milestones, setMilestones] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getMilestones(localStorage.getItem("projectId"));
+      setMilestones(result);
+      console.log("milestones");
+      console.log(milestones);
+    };
+    fetchData();
+  }, []);
+
+  const comp =
+    milestones == null || milestones.isLoading || milestones.isError ? (
+      <CircularProgress />
+    ) : (
+      <TableBody>
+        {milestones.map((milestone) => (
+          <TableRow key={milestone.id}>
+            <TableCell>{milestone.title}</TableCell>
+            <TableCell>{milestone.description}</TableCell>
+            <TableCell>
+              {milestone.startDateTime.replace("T", " :: ")}
+            </TableCell>
+            <TableCell>{milestone.endDateTime.replace("T", " :: ")}</TableCell>
+            <TableCell>
+              <IconButton>
+                <EditIcon />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    );
+
   return (
     <>
       <MilestoneCreation open={open} setOpen={setOpen} projectId={getId()} />
@@ -66,8 +98,10 @@ export default function MilestoneList() {
                     <TableCell>Description</TableCell>
                     <TableCell>Start Date</TableCell>
                     <TableCell>End Date</TableCell>
+                    <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
+                {comp}
               </Table>
             </TableContainer>
           </Grid>

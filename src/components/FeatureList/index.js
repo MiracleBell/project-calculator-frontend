@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { logout } from "@root/store/auth";
-import MilestoneCreation from "@root/components/MilestoneCreation";
-import teamsApi from "@root/store/teamApi";
-import useListTeamQuery from "@root/store/teamApi";
+import featuresApi from "@root/store/featureApi";
+import { getFeaturez } from "@root/store/featureApi";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { featuresApi } from "@root/store/featureApi";
+import { getFeatures } from "@root/store/featureApi";
 
 import {
   Box,
@@ -26,15 +25,6 @@ import {
   Typography,
 } from "@mui/material";
 
-function getId() {
-  const currentURL = window.location.href;
-  let id = currentURL.substring(
-    currentURL.lastIndexOf("/projects") + 10,
-    currentURL.length
-  );
-  return id;
-}
-
 export default function FeatureList() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -44,24 +34,42 @@ export default function FeatureList() {
   function handleLogoutClick() {
     dispatch(logout());
   }
-
   const [features, setFeatures] = useState(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getFeatures(localStorage.getItem("projectId"));
+      setFeatures(result);
+    };
+    fetchData();
+  }, []);
+
   const comp =
-    features == null ? (
+    features == null || features.isLoading || features.isError ? (
       <CircularProgress />
     ) : (
       <TableBody>
         {features.map((feature) => (
           <TableRow key={feature.id}>
-            <TableCell sx={{ background: "#CCEA8A" }}></TableCell>
-            <TableCell sx={{ background: "#CCEA8A" }}></TableCell>
-            <TableCell sx={{ background: "#CCEA8A" }}></TableCell>
-            <TableCell sx={{ background: "#CCEA8A" }}></TableCell>
+            <TableCell>{feature.title}</TableCell>
+            <TableCell>{feature.description}</TableCell>
+            <TableCell sx={{ background: "#CCEA8A" }}>
+              {feature.bestCaseEstimateInDays}
+            </TableCell>
+            <TableCell sx={{ background: "#CCEA8A" }}>
+              {feature.mostLikelyEstimateInDays}
+            </TableCell>
+            <TableCell sx={{ background: "#CCEA8A" }}>
+              {feature.worstCaseEstimateInDays}
+            </TableCell>
+            <TableCell sx={{ background: "#CCEA8A" }}>
+              {feature.milestoneId}
+            </TableCell>
             <TableCell sx={{ background: "#98A9A7" }}>
-              <IconButton>
-                <EditIcon />
-              </IconButton>
+              {feature.estimateInDays}
+            </TableCell>
+            <TableCell sx={{ background: "#98A9A7" }}>
+              {feature.priceInRubles}
             </TableCell>
           </TableRow>
         ))}
@@ -82,7 +90,7 @@ export default function FeatureList() {
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
-              <TableRow>
+              <TableRow sx={{ border: 2 }}>
                 <TableCell>Feature Name</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell sx={{ background: "#CCEA8A" }}>Optimistic</TableCell>
@@ -92,6 +100,7 @@ export default function FeatureList() {
                 </TableCell>
                 <TableCell sx={{ background: "#CCEA8A" }}>Milestone</TableCell>
                 <TableCell sx={{ background: "#98A9A7" }}>Estimation</TableCell>
+                <TableCell sx={{ background: "#98A9A7" }}>Price</TableCell>
               </TableRow>
             </TableHead>
             {comp}
