@@ -106,7 +106,7 @@ export default function MilestoneList() {
             </TableContainer>
           </Grid>
           <Grid item xs={2}>
-            <Box
+            {/* <Box
               textAlign={"center"}
               minWidth={300}
               minHeight={200}
@@ -126,7 +126,7 @@ export default function MilestoneList() {
               <Typography variant="h6" textAlign={"left"} sx={{ margin: 2 }}>
                 Budjet:
               </Typography>
-            </Box>
+            </Box> */}
           </Grid>
         </Grid>
       </Box>

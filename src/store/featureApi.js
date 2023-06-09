@@ -36,8 +36,8 @@ const featuresApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: PATH }),
   endpoints: (builder) => ({
     list: builder.query({
-      query: () => ({
-        url: "",
+      query: (projectId, body) => ({
+        url: `${projectId}/features`,
         mode: "cors",
         method: "GET",
         headers: {
@@ -47,6 +47,7 @@ const featuresApi = createApi({
           Origin: ORIGIN,
           Authorization: JSON.parse(localStorage.getItem("user")),
         },
+        body,
       }),
       providesTags: (result) => {
         if (result) {
@@ -59,8 +60,8 @@ const featuresApi = createApi({
       },
     }),
     create: builder.mutation({
-      query: (body) => ({
-        url: "",
+      query: (projectId, body) => ({
+        url: `${projectId}/features`,
         mode: "cors",
         method: "POST",
         headers: {

@@ -30,6 +30,31 @@ export const getProjects = async () => {
   return arr;
 };
 
+export const deleteProjects = async (projectId) => {
+  const res = await fetch(PATH + `/${projectId}`, {
+    mode: "cors",
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": ORIGIN,
+      Origin: ORIGIN,
+      Authorization: JSON.parse(localStorage.getItem("user")),
+    },
+  });
+
+  let parse = await res.json();
+  if (parse.errors !== undefined) {
+    return await parse.errors;
+  }
+  const arr = [];
+  parse.map((elem) => {
+    arr.push(elem);
+  });
+
+  return arr;
+};
+
 const projectsApi = createApi({
   reducerPath: "projectsApi",
   baseQuery: fetchBaseQuery({ baseUrl: PATH }),

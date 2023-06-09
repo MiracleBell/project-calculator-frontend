@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import projectsApi from "@root/store/projectApi";
+import EstimateBoard from "@root/components/EstimateBoard";
 
 import {
   Box,
@@ -123,7 +124,8 @@ export default function ProjectInfo() {
             </Box>
           </Grid>
           <Grid>
-            <Box
+            <EstimateBoard project={project}></EstimateBoard>
+            {/* <Box
               textAlign={"center"}
               minWidth={300}
               minHeight={200}
@@ -143,7 +145,7 @@ export default function ProjectInfo() {
               <Typography variant="h6" textAlign={"left"} sx={{ margin: 2 }}>
                 Budjet: {project.priceInRubles / 5} rubles
               </Typography>
-            </Box>
+            </Box> */}
           </Grid>
         </Grid>
       </>

@@ -71,11 +71,11 @@ export default function ProjectList() {
     console.log(filteredProjects);
   }, [searchTerm]);
 
-  const comp = projects.isLoading ? (
+  const comp = filteredProjects.isLoading ? (
     <CircularProgress />
   ) : (
     <TableBody>
-      {projects.data.map((project) => (
+      {filteredProjects.data.map((project) => (
         <TableRow key={project.id}>
           <TableCell>{project.title}</TableCell>
           <TableCell>{project.description}</TableCell>

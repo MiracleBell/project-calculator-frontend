@@ -5,6 +5,7 @@ import ProjectList from "@root/scenes/ProjectList";
 import Home from "@root/scenes/Home";
 import ProjectCreation from "@root/scenes/ProjectCreation";
 import Project from "@root/scenes/Project";
+import UserProfile from "../scenes/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
     path: "/projects",
     element: <ProjectList />,
   },
+  { path: "/user", element: <UserProfile /> },
   {
     path: "/signup",
     element: <SignUp />,

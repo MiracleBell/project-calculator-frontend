@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { isAuthenticated, logout } from "@root/store/auth";
 
-import { Box, Button } from "@mui/material";
+import { Avatar, Box, Button } from "@mui/material";
 
 export default function Layout({ children }) {
   const isAuth = useSelector(isAuthenticated);
@@ -21,10 +21,22 @@ export default function Layout({ children }) {
     dispatch(logout());
   }
 
+  function handleProfileClick() {
+    navigate("/user");
+  }
+
   return (
     <>
-      <Box textAlign={"right"}>
-        <Button variant="contained" onClick={handleLogoutClick}>
+      <Box display="flex" textAlign={"right"} justifyContent={"flex-end"}>
+        <Avatar
+          onClick={handleProfileClick}
+          sx={{ m: 1, mr: 3, bgcolor: "green" }}
+        />
+        <Button
+          variant="contained"
+          onClick={handleLogoutClick}
+          sx={{ mt: 1, mb: 1 }}
+        >
           logout
         </Button>
       </Box>

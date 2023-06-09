@@ -7,6 +7,7 @@ import { getFeaturez } from "@root/store/featureApi";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { getFeatures } from "@root/store/featureApi";
+import DropdownCell from "@root/components/DropdownCell";
 
 import {
   Box,
@@ -14,7 +15,9 @@ import {
   CircularProgress,
   Grid,
   IconButton,
+  MenuItem,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -24,11 +27,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import FeatureCreation from "../FeatureCreation";
 
 export default function FeatureList() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [selectedValue, setSelectedValue] = useState("");
+  const options = [
+    { value: "option1", label: "start test" },
+    { value: "option2", label: "Option 2" },
+    { value: "option3", label: "Option 3" },
+  ];
+  const handleValueChange = (value) => {
+    setSelectedValue(value);
+  };
 
   const dispatch = useDispatch();
   function handleLogoutClick() {
@@ -50,7 +64,7 @@ export default function FeatureList() {
     ) : (
       <TableBody>
         {features.map((feature) => (
-          <TableRow key={feature.id}>
+          <TableRow key={feature.id} sx={{ border: 2 }}>
             <TableCell>{feature.title}</TableCell>
             <TableCell>{feature.description}</TableCell>
             <TableCell sx={{ background: "#CCEA8A" }}>
@@ -62,14 +76,24 @@ export default function FeatureList() {
             <TableCell sx={{ background: "#CCEA8A" }}>
               {feature.worstCaseEstimateInDays}
             </TableCell>
-            <TableCell sx={{ background: "#CCEA8A" }}>
-              {feature.milestoneId}
-            </TableCell>
+            <DropdownCell
+              options={options}
+              value={selectedValue}
+              onChange={handleValueChange}
+            />
             <TableCell sx={{ background: "#98A9A7" }}>
               {feature.estimateInDays}
             </TableCell>
             <TableCell sx={{ background: "#98A9A7" }}>
               {feature.priceInRubles}
+            </TableCell>
+            <TableCell>
+              <IconButton>
+                <EditIcon />
+              </IconButton>
+              <IconButton>
+                <DeleteIcon />
+              </IconButton>
             </TableCell>
           </TableRow>
         ))}
@@ -78,7 +102,8 @@ export default function FeatureList() {
 
   return (
     <>
-      <Box maxWidth={800}>
+      <FeatureCreation open={open} setOpen={setOpen} />
+      <Box maxWidth={1050}>
         <Button
           variant="contained"
           color="success"
@@ -101,6 +126,7 @@ export default function FeatureList() {
                 <TableCell sx={{ background: "#CCEA8A" }}>Milestone</TableCell>
                 <TableCell sx={{ background: "#98A9A7" }}>Estimation</TableCell>
                 <TableCell sx={{ background: "#98A9A7" }}>Price</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             {comp}
